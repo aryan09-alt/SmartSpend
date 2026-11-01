@@ -1,3 +1,8 @@
+## 🌐 Live Demo
+
+Explore SmartSpend: 
+https://aryan09-alt.github.io/SmartSpend/
+
 # 💰 SmartSpend – Personal Expense Tracker
 
 A console-based Personal Expense Tracker built using C language.
