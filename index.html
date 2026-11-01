@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartSpend | Personal Finance Manager</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #080b14;
+    color: #fff;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+:root {
+    --blue: #38bdf8;
+    --purple: #8b5cf6;
+    --green: #34d399;
+    --muted: #94a3b8;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    background: #2563eb;
+    filter: blur(180px);
+    opacity: .17;
+    top: -180px;
+    left: -150px;
+    z-index: -1;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    background: #9333ea;
+    filter: blur(180px);
+    opacity: .13;
+    bottom: -150px;
+    right: -100px;
+    z-index: -1;
+}
+
+/* NAVBAR */
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 9%;
+    border-bottom: 1px solid #ffffff12;
+    background: #080b14cc;
+    backdrop-filter: blur(15px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: 800;
+    color: var(--blue);
+    letter-spacing: 1px;
+}
+
+.logo span {
+    color: white;
+}
+
+nav a {
+    color: #cbd5e1;
+    text-decoration: none;
+    margin-left: 25px;
+    font-size: 14px;
+    transition: .3s;
+}
+
+nav a:hover {
+    color: var(--blue);
+}
+
+/* HERO */
+
+.hero {
+    min-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.badge {
+    border: 1px solid #38bdf855;
+    background: #38bdf810;
+    padding: 9px 18px;
+    border-radius: 30px;
+    color: var(--blue);
+    font-size: 13px;
+    margin-bottom: 28px;
+    animation: fadeUp 1s ease;
+}
+
+.hero h1 {
+    font-size: clamp(48px, 9vw, 90px);
+    font-weight: 900;
+    letter-spacing: -4px;
+    background: linear-gradient(90deg, #fff, #38bdf8, #a78bfa);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: fadeUp 1s ease;
+}
+
+.hero h2 {
+    color: #cbd5e1;
+    font-size: clamp(18px, 3vw, 27px);
+    font-weight: 400;
+    margin-top: 15px;
+    animation: fadeUp 1.3s ease;
+}
+
+.hero p {
+    max-width: 600px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin: 22px auto 32px;
+    animation: fadeUp 1.5s ease;
+}
+
+.buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn {
+    padding: 14px 25px;
+    border-radius: 9px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: .3s;
+}
+
+.primary {
+    background: linear-gradient(100deg, #2563eb, #8b5cf6);
+    color: white;
+    box-shadow: 0 0 25px #6366f655;
+}
+
+.secondary {
+    border: 1px solid #ffffff35;
+    color: white;
+}
+
+.btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 30px #38bdf855;
+}
+
+.scroll {
+    margin-top: 70px;
+    color: var(--muted);
+    font-size: 13px;
+    animation: float 2s infinite;
+}
+
+/* COMMON SECTIONS */
+
+section {
+    padding: 90px 9%;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 15px;
+}
+
+.section-desc {
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 50px;
+    line-height: 1.7;
+}
+
+/* DASHBOARD */
+
+.dashboard {
+    background: #111827aa;
+    border: 1px solid #ffffff18;
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 1000px;
+    margin: auto;
+    box-shadow: 0 20px 70px #0008;
+}
+
+.dash-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.dash-top h3 {
+    font-size: 22px;
+}
+
+.live {
+    color: var(--green);
+    font-size: 12px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.card {
+    background: #1e293b;
+    border: 1px solid #ffffff12;
+    padding: 24px;
+    border-radius: 14px;
+    transition: .3s;
+}
+
+.card:hover {
+    transform: translateY(-7px);
+    border-color: var(--blue);
+}
+
+.card small {
+    color: var(--muted);
+}
+
+.card h2 {
+    margin-top: 15px;
+    font-size: 25px;
+}
+
+.income h2 { color: var(--green); }
+.expense h2 { color: #fb7185; }
+.balance h2 { color: var(--blue); }
+
+/* TRANSACTIONS */
+
+.table-box {
+    overflow-x: auto;
+    margin-top: 30px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 500px;
+}
+
+th, td {
+    text-align: left;
+    padding: 16px;
+    border-bottom: 1px solid #ffffff12;
+}
+
+th {
+    color: var(--blue);
+    font-size: 13px;
+}
+
+td {
+    color: #cbd5e1;
+    font-size: 14px;
+}
+
+.in {
+    color: var(--green);
+}
+
+.out {
+    color: #fb7185;
+}
+
+/* FEATURES */
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.feature {
+    background: #111827aa;
+    border: 1px solid #ffffff15;
+    border-radius: 15px;
+    padding: 28px;
+    transition: .3s;
+}
+
+.feature:hover {
+    transform: translateY(-8px);
+    border-color: var(--purple);
+    box-shadow: 0 10px 35px #8b5cf622;
+}
+
+.icon {
+    font-size: 32px;
+    margin-bottom: 18px;
+}
+
+.feature h3 {
+    margin-bottom: 12px;
+}
+
+.feature p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* TECHNOLOGIES */
+
+.tech-list {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.tech {
+    padding: 14px 23px;
+    border: 1px solid #38bdf844;
+    border-radius: 10px;
+    background: #38bdf80c;
+    color: #bae6fd;
+    transition: .3s;
+}
+
+.tech:hover {
+    background: #2563eb33;
+    transform: scale(1.06);
+}
+
+/* ABOUT */
+
+.about {
+    max-width: 750px;
+    margin: auto;
+    text-align: center;
+    background: #111827aa;
+    border: 1px solid #ffffff15;
+    padding: 45px 25px;
+    border-radius: 18px;
+}
+
+.about h3 {
+    font-size: 27px;
+    margin-bottom: 15px;
+}
+
+.about p {
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    padding: 35px 15px;
+    border-top: 1px solid #ffffff15;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* ANIMATIONS */
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+}
+
+@media(max-width: 750px) {
+    nav {
+        padding: 18px 5%;
+    }
+
+    nav a {
+        margin-left: 10px;
+        font-size: 12px;
+    }
+
+    .cards, .features {
+        grid-template-columns: 1fr;
+    }
+
+    section {
+        padding: 65px 6%;
+    }
+
+    .dashboard {
+        padding: 18px;
+    }
+
+    .hero h1 {
+        letter-spacing: -2px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">Smart<span>Spend.</span></div>
+    <div>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+    </div>
+</nav>
+
+<!-- WELCOME SCREEN -->
+
+<header class="hero">
+
+    <div class="badge">✦ INTRODUCING SMARTSPEND v3.0</div>
+
+    <h1>SmartSpend.</h1>
+
+    <h2>Take Control of Your Money.</h2>
+
+    <p>
+        A personal expense tracker built with C programming.
+        Track your income, manage expenses and stay aware
+        of your financial balance.
+    </p>
+
+    <div class="buttons">
+        <a href="#dashboard" class="btn primary">
+            Explore Project →
+        </a>
+
+        <a href="https://github.com/aryan09-alt/SmartSpend"
+           target="_blank" class="btn secondary">
+            View Source Code ↗
+        </a>
+    </div>
+
+    <div class="scroll">SCROLL TO EXPLORE ↓</div>
+
+</header>
+
+<!-- DASHBOARD -->
+
+<section id="dashboard">
+
+    <h2 class="section-title">Financial Overview</h2>
+
+    <p class="section-desc">
+        A preview of the SmartSpend financial dashboard.
+    </p>
+
+    <div class="dashboard">
+
+        <div class="dash-top">
+            <h3>📊 My Dashboard</h3>
+            <span class="live">● PROJECT PREVIEW</span>
+        </div>
+
+        <div class="cards">
+
+            <div class="card income">
+                <small>↗ TOTAL INCOME</small>
+                <h2>₹20,000</h2>
+            </div>
+
+            <div class="card expense">
+                <small>↘ TOTAL EXPENSES</small>
+                <h2>₹500</h2>
+            </div>
+
+            <div class="card balance">
+                <small>◈ AVAILABLE BALANCE</small>
+                <h2>₹19,500</h2>
+            </div>
+
+        </div>
+
+        <div class="table-box">
+
+            <h3 style="margin:30px 0 15px;">
+                Recent Transactions
+            </h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>TRANSACTION</th>
+                        <th>CATEGORY</th>
+                        <th>DATE</th>
+                        <th>AMOUNT</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>Income</td>
+                        <td>Salary</td>
+                        <td>01-11-2026</td>
+                        <td class="in">+ ₹20,000</td>
+                    </tr>
+
+                    <tr>
+                        <td>Expense</td>
+                        <td>Food</td>
+                        <td>01-11-2026</td>
+                        <td class="out">- ₹500</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- FEATURES -->
+
+<section id="features">
+
+    <h2 class="section-title">Powerful Features</h2>
+
+    <p class="section-desc">
+        Everything you need to manage your transactions.
+    </p>
+
+    <div class="features">
+
+        <div class="feature">
+            <div class="icon">💰</div>
+            <h3>Income & Expenses</h3>
+            <p>Record your income and daily expenses with ease.</p>
+        </div>
+
+        <div class="feature">
+            <div class="icon">📊</div>
+            <h3>Financial Dashboard</h3>
+            <p>View your total income, expenses and available balance.</p>
+        </div>
+
+        <div class="feature">
+            <div class="icon">📋</div>
+            <h3>Transaction History</h3>
+            <p>View and organize your recorded transactions.</p>
+        </div>
+
+        <div class="feature">
+            <div class="icon">🔍</div>
+            <h3>Search Transactions</h3>
+            <p>Find transactions using their unique ID.</p>
+        </div>
+
+        <div class="feature">
+            <div class="icon">✏️</div>
+            <h3>Edit & Delete</h3>
+            <p>Update existing records or delete transactions.</p>
+        </div>
+
+        <div class="feature">
+            <div class="icon">💾</div>
+            <h3>Data Persistence</h3>
+            <p>Store and retrieve transaction records using file handling.</p>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- TECHNOLOGIES -->
+
+<section>
+
+    <h2 class="section-title">Built With</h2>
+
+    <p class="section-desc">
+        Core programming concepts used in this project.
+    </p>
+
+    <div class="tech-list">
+        <div class="tech">C Programming</div>
+        <div class="tech">Structures</div>
+        <div class="tech">Functions</div>
+        <div class="tech">Arrays</div>
+        <div class="tech">File Handling</div>
+    </div>
+
+</section>
+
+<!-- ABOUT -->
+
+<section id="about">
+
+    <div class="about">
+
+        <div style="font-size:40px; margin-bottom:15px;">
+            👨‍💻
+        </div>
+
+        <h3>Built by Aryan Tembhurnikar</h3>
+
+        <p>
+            SmartSpend is my first C programming project.
+            It was developed as a practical learning experience
+            to understand programming fundamentals and apply
+            them to a real-world use case.
+        </p>
+
+        <br>
+
+        <a href="https://github.com/aryan09-alt/SmartSpend"
+           target="_blank" class="btn primary">
+            Explore on GitHub ↗
+        </a>
+
+    </div>
+
+</section>
+
+<footer>
+    <p>SMARTSPEND v3.0 | Personal Finance Manager</p>
+    <p style="margin-top:10px;">
+        Built with C Programming & Creativity.
+    </p>
+    <p style="margin-top:10px;">
+        © 2026 Aryan Tembhurnikar
+    </p>
+</footer>
+
+</body>
+</html>
